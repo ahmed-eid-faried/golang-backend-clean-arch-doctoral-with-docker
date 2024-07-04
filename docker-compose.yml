@@ -1,36 +1,68 @@
+# version: "3.8" # Adjust version as per your Docker Compose version
+
+# services:
+#   app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "8888:8888"
+#     depends_on:
+#       - postgres
+#       - mongodb
+#       - redis
+#     environment:
+#       database_uri: postgres://postgres:1234@postgres:5432/postgres # Updated database URI
+
+#   postgres:
+#     image: postgres:latest
+#     environment:
+#       POSTGRES_DB: postgres
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: 1234
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   mongodb:
+#     image: mongo:latest
+#     ports:
+#       - "27017:27017"
+
+#   redis:
+#     image: redis:latest
+#     ports:
+#       - "6379:6379"
+
+# volumes:
+#   postgres_data:
+#     driver: local
+
+version: "3.8"
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  goshop:
+    image: "github.com/ahmed-eid-faried/golang-backend-clean-arch-doctoral-with-docker"
+    build: .
     ports:
-      - "8080:8080"
+      - "8888:8888"
+    environment:
+      port: 8888
+      auth_secret: auth_secret
+      database_uri: postgres://postgres:1234@postgres:5432/postgres
+      redis_uri: redis:6379
+      redis_db: 0
+
     depends_on:
       - postgres
-      - mongodb
       - redis
 
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_DB: postgres #your_database_name
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-
   redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
+    image: "redis:alpine"
 
-volumes:
-  postgres_data:
-    driver: local
+  postgres:
+    restart: always
+    image: "postgres:latest"
+    environment:
+      DATABASE_USER: postgres
+      POSTGRES_PASSWORD: 1234

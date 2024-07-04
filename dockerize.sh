@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# chmod +x cmd/api/main.go
 # chmod +x dockerize.sh
 # ./dockerize.sh
 
@@ -18,7 +19,7 @@ stop_process_on_port() {
 
 # Check and stop processes using specific ports
 stop_processes_on_ports() {
-    stop_process_on_port 8080
+    stop_process_on_port 8888
     stop_process_on_port 5432
     stop_process_on_port 27017
     stop_process_on_port 6379
@@ -47,5 +48,7 @@ main() {
     echo "Docker containers are up and running."
 }
 
+go mod tidy
+swag init -g cmd/api/main.go
 # Call the main function
 main
