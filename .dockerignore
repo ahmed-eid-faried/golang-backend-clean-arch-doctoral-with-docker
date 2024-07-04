@@ -1,0 +1,6 @@
+# Exclude common Go files and directories
+*.exe
+*.test
+*.prof
+*.out
+/vendor
